@@ -1,12 +1,9 @@
 package com.springbootlearning.SpringbootLearning.EmployeeManagement;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api")
@@ -19,23 +16,19 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PostMapping("/saveEmployee")
-    public void add(@RequestBody Employee employee){
-        employeeService.saveEmployee(employee);
+    @PostMapping("/department/{id}/createEmployee")
+    public void add(@RequestBody Employee employee, @PathVariable Long id){
+        employeeService.createEmployee(id, employee);
     }
 
-    @PutMapping("/updateEmployee/{id}")
-    public ResponseEntity<?> update(@RequestBody Employee employee, @PathVariable Long id){
-        try {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping("/department/{departmentId}/updateEmployee/{employeeId}")
+    public void update(@RequestBody Employee employee, @PathVariable Long departmentId, @PathVariable Long employeeId){
+        employeeService.updateEmployee(departmentId, employeeId, employee);
     }
 
-    @DeleteMapping("/deleteEmployee/{id}")
-    public void delete(@PathVariable Long id){
-        employeeService.deleteEmployee(id);
+    @DeleteMapping("/department/{departmentId}/deleteEmployee/{employeeId}")
+    public void delete(@PathVariable Long departmentId, @PathVariable Long employeeId){
+        employeeService.deleteEmployee(departmentId, employeeId);
     }
 
     @GetMapping("/getEmployees")
@@ -43,4 +36,23 @@ public class EmployeeController {
         return employeeService.listAllEmployees();
     }
 
+    @GetMapping("/department/{departmentId}/getEmployees")
+    public List<Employee> getEmployeesInDepartment(@PathVariable Long departmentId){
+        return employeeService.listEmployeesInDepartment(departmentId);
+    }
+
+    @GetMapping("/department/{departmentId}/departmentOverview")
+    public String getNumberOfEmployeesInDepartment(@PathVariable Long departmentId){
+        return employeeService.numberOfEmployeesInADepartment(departmentId);
+    }
+
+    @GetMapping("/getEmployeeDetails/{employeeId}")
+    public Employee getEmployeeDetails(@PathVariable Long employeeId){
+        return employeeService.getEmployee(employeeId);
+    }
+
+    @GetMapping("/getEmployeeAndDepartmentDetails/{employeeId}")
+    public Employee getEmployeeAndDepartmentDetails(@PathVariable Long employeeId){
+        return employeeService.getEmployee(employeeId);
+    }
 }
