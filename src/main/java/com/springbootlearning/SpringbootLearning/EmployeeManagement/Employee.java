@@ -1,53 +1,61 @@
 package com.springbootlearning.SpringbootLearning.EmployeeManagement;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springbootlearning.SpringbootLearning.DepartmentManagement.Department;
 
 import javax.persistence.*;
 
 @Entity
-@Table
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "employee")
 public class Employee {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
+    @Column(name = "id")
     private Long id;
 
-    private String employeeName, employeeAddress, employeeEducation, employeeContactNumber;
+    @Column(name = "employee_name")
+    private String employeeName;
+
+    @Column(name = "employee_address")
+    private String employeeAddress;
+
+    @Column(name = "employee_education")
+    private String employeeEducation;
+
+    @Column(name = "employee_contact_number")
+    private String employeeContactNumber;
+
+    @Column(name = "employee_age")
     private Integer employeeAge;
 
-    private Long departmentId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
     public Employee() {
     }
 
-    public Employee(String employeeName, String employeeAddress, String employeeEducation, String employeeContactNumber, Integer employeeAge, Long departmentId) {
+    public Employee(String employeeName, String employeeAddress, String employeeEducation, String employeeContactNumber, Integer employeeAge) {
         this.employeeName = employeeName;
         this.employeeAddress = employeeAddress;
         this.employeeEducation = employeeEducation;
         this.employeeContactNumber = employeeContactNumber;
         this.employeeAge = employeeAge;
-        this.departmentId = departmentId;
     }
 
-    public Employee(Long id, String employeeName, String employeeAddress, String employeeEducation, String employeeContactNumber, Integer employeeAge, Long departmentId) {
-        this.id = id;
+    public Employee(String employeeName, String employeeAddress, String employeeEducation, String employeeContactNumber, Integer employeeAge, Department department) {
         this.employeeName = employeeName;
         this.employeeAddress = employeeAddress;
         this.employeeEducation = employeeEducation;
         this.employeeContactNumber = employeeContactNumber;
         this.employeeAge = employeeAge;
-        this.departmentId = departmentId;
-    }
-
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
+        this.department = department;
     }
 
     public Long getId() {
@@ -96,5 +104,25 @@ public class Employee {
 
     public void setEmployeeAge(Integer employeeAge) {
         this.employeeAge = employeeAge;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", employeeName='" + employeeName + '\'' +
+                ", employeeAddress='" + employeeAddress + '\'' +
+                ", employeeEducation='" + employeeEducation + '\'' +
+                ", employeeContactNumber='" + employeeContactNumber + '\'' +
+                ", employeeAge=" + employeeAge +
+                '}';
     }
 }

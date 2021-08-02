@@ -23,12 +23,18 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
-    public void saveDepartment(Department department){
+    public void createDepartment(Department department){
         departmentRepository.save(department);
     }
 
     public Department getDepartment(Long id){
         return departmentRepository.findById(id).get();
+    }
+
+    public void updateDepartment(Long id, Department department){
+        Department existingDepartment = departmentRepository.findById(id).get();
+        existingDepartment.setDepartmentName(department.getDepartmentName());
+        departmentRepository.save(existingDepartment);
     }
 
     public void deleteDepartment(Long id){

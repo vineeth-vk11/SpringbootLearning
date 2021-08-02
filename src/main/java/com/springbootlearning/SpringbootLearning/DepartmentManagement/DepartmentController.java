@@ -19,14 +19,15 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    @PostMapping("/saveDepartment")
+    @PostMapping("/createDepartment")
     public void add(@RequestBody Department department){
-        departmentService.saveDepartment(department);
+        departmentService.createDepartment(department);
     }
 
     @PutMapping("/updateDepartment/{id}")
     public ResponseEntity<?> update(@RequestBody Department department, @PathVariable Long id){
         try {
+            departmentService.updateDepartment(id, department);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (NoSuchElementException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
